@@ -4,37 +4,35 @@ import requests
 
 weatherapp_app = Blueprint("weatherapp",__name__)
 
-def get_weather(api_key, city):
-    base_url = "https://api.openweathermap.org/data/2.5/weather?"
-    complete_url = f"{base_url}q={city}&appid={api_key}&units=metric"
-    response = requests.get(complete_url)
-    data = response.json()
-    print("API Response:", data)
+def get_weather(api_key, city, country):
+    base_url = "http://api.openweathermap.org/data/2.5/weather"
+    params = {
+        'q': f'{city},{country}',
+        'appid': api_key,
+        'units': 'metric'  # You can use 'imperial' for Fahrenheit
+    }
 
-    if data["cod"] != "404":
-        main_data = data["main"]
-        weather_data = data["weather"][0]
-        temperature = main_data["temp"]
-        humidity = main_data["humidity"]
-        description = weather_data["description"]
-        return {
-            "city": city,
-            "temperature": temperature,
-            "humidity": humidity,
-            "description": description
-        }
-    else:
-        return None
+    try:
+        response = requests.get(base_url, params=params)
+        data = response.json()
 
-@weatherapp_app.route("/", methods=["GET", "POST"])
-def index():
-    if request.method == "POST":
-        city = request.form.get("city")
-        api_key = os.environ.get("weather")
-        weather_data = get_weather(api_key, city)
-        if weather_data:
-            return render_template("weatherapp.html", weather_data=weather_data)
+        if response.status_code == 200:
+            temperature = data['main']['temp']
+            description = data['weather'][0]['description']
+            return f'Temperature in {city}, {country}: {temperature}°C\nWeather Description: {description}'
         else:
-            return render_template("weatherapp.html", error="City not found!")
+            return f'Error: {data["message"]}'
 
-    return render_template("weatherapp.html", weather_data=None, error=None)
+    except Exception as e:
+        return f'An error occurred: {e}'
+
+@weatherapp_app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        api_key = os.environ.get("weather")
+        city = request.form['city']
+        country = request.form['country']
+        weather_info = get_weather(api_key, city, country)
+        return render_template('weatherapp.html', weather_info=weather_info)
+    return render_template('weatherapp.html')
+

@@ -3,52 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <title>Weather App</title>
+
+    <!-- Include Bootstrap CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<style>
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-    }
-
-    .container {
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f5f5f5;
-    }
-</style>
-<body>
-
-<div class="container">
-    <h1 class="mb-4">Weather App</h1>
-    <form method="post" action="/weatherapp">
-        <div class="form-group">
-            <label for="city">Enter city name:</label>
-            <input type="text" class="form-control" id="city" name="city" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Get Weather</button>
-    </form>
-
-    {% if weather_data %}
-    <div class="mt-4">
-        <h3>Weather in {{ weather_data.city }}:</h3>
-        <p>Temperature: {{ weather_data.temperature }}°C</p>
-        <p>Humidity: {{ weather_data.humidity }}%</p>
-        <p>Description: {{ weather_data.description }}</p>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h1 class="display-4 text-center">Weather App</h1>
+        <form method="post" class="mt-4" action="/weatherapp">
+            <div class="mb-3">
+                <label for="city" class="form-label">Enter the city:</label>
+                <input type="text" id="city" name="city" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="country" class="form-label">Enter the country code (e.g., US, IN):</label>
+                <input type="text" id="country" name="country" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Get Weather</button>
+        </form>
+        {% if weather_info %}
+            <div class="mt-4">
+                <p class="lead">{{ weather_info }}</p>
+            </div>
+        {% endif %}
     </div>
-    {% endif %}
 
-    {% if error %}
-    <div class="mt-4 alert alert-danger" role="alert">
-        {{ error }}
-    </div>
-    {% endif %}
-</div>
-
+    <!-- Include Bootstrap JS and Popper.js from CDN (required for some Bootstrap features) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+    

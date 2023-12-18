@@ -15,4 +15,5 @@ app.register_blueprint(languagetranslator_app, url_prefix="/languagetranslator")
 app.register_blueprint(currencyconverter_app, url_prefix="/currencyconverter")  
 
 if __name__ == '__main__':
-    app.run(port=8004, debug=True)
+  app.run(debug=True)
+    
