@@ -16,4 +16,3 @@ app.register_blueprint(currencyconverter_app, url_prefix="/currencyconverter")
 
 if __name__ == '__main__':
   app.run(debug=True)
-    
