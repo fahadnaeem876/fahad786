@@ -1,15 +1,18 @@
 import os
-from flask import Flask, render_template, request, Blueprint
+from flask import Flask, render_template, request , Blueprint
+from dotenv import load_dotenv 
 import requests
 
-weatherapp_app = Blueprint("weatherapp",__name__)
+load_dotenv()
+
+weatherapp_app = Blueprint("weather",__name__)
 
 def get_weather(api_key, city, country):
     base_url = "http://api.openweathermap.org/data/2.5/weather"
     params = {
         'q': f'{city},{country}',
         'appid': api_key,
-        'units': 'metric'  # You can use 'imperial' for Fahrenheit
+        'units': 'metric'
     }
 
     try:
@@ -29,10 +32,9 @@ def get_weather(api_key, city, country):
 @weatherapp_app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        api_key = os.environ.get("weather")
+        api_key = os.getenv('weather_api_key')
         city = request.form['city']
         country = request.form['country']
         weather_info = get_weather(api_key, city, country)
         return render_template('weatherapp.html', weather_info=weather_info)
-    return render_template('weatherapp.html')
-
+        return render_template('weatherapp.html')
