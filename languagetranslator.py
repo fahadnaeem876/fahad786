@@ -1,53 +1,27 @@
 from flask import Flask, render_template, request, Blueprint
 from googletrans import Translator
 
-languagetranslator_app = Blueprint("languagetranslator", __name__)
+languagetranslator_app = Blueprint("languagetranslator",__name__)
 
-# Language names and codes
-language_names = {
-    "English": "english",
-    "Spanish": "Spanish",
-    "French": "French",
-    "Hindi": "Hindi",
-    "German": "German",
-    "Japanese": "Japanese",
-    "Urdu": "Urdu",
-    "Arabic": "Arabic"
-}
-
-@languagetranslator_app.route("/", methods=["GET", "POST"])
-def index():
-    if request.method == "POST":
-        user_input = request.form.get("user_input")
-        from_lang = request.form.get("from_lang")
-        to_lang = request.form.get("to_lang")
+@languagetranslator_app.route('/', methods=['GET', 'POST'])
+def translate_text():
+    if request.method == 'POST':
+        text_to_translate = request.form['text_to_translate']
+        target_language = request.form['target_language']
 
         translator = Translator()
+
         try:
-            translation = translator.translate(user_input, src=from_lang, dest=to_lang)
-            translated_text = translation.text if translation else "Translation failed. Please try again."
+            detected_language = translator.detect(text_to_translate).lang
+            translated_text = translator.translate(text_to_translate, dest=target_language).text
+
+            return render_template('languagetranslator.html', 
+                                   original_text=text_to_translate, 
+                                   detected_language=detected_language,
+                                   target_language=target_language,
+                                   translated_text=translated_text)
         except Exception as e:
-            print(f"Translation error: {e}")
-            translated_text = "An error occurred during translation."
+            error_message = f"Error: {e}"
+            return render_template('languagetranslator.html', error_message=error_message)
 
-        return render_template(
-            "languagetranslator.html",
-            translated_text=translated_text,
-            user_input=user_input,
-            from_lang=from_lang,
-            to_lang=to_lang,
-            language_names=language_names
-        )
-
-    return render_template(
-        "languagetranslator.html",
-        translated_text=None,
-        user_input=None,
-        from_lang=None,
-        to_lang=None,
-        language_names=language_names
-    )
-
-    app = Flask(__name__)
-    app.register_blueprint(languagetranslator_app, url_prefix="/languagetranslator")
-    app.run(debug=True)
+    return render_template('languagetranslator.html')
