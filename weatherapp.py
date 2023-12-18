@@ -1,11 +1,11 @@
 import os
-from flask import Flask, render_template, request , Blueprint
-from dotenv import load_dotenv 
+from flask import Flask, render_template, request, Blueprint
+from dotenv import load_dotenv
 import requests
 
 load_dotenv()
 
-weatherapp_app = Blueprint("weather",__name__)
+weatherapp_app = Blueprint("weather", __name__)
 
 def get_weather(api_key, city, country):
     base_url = "http://api.openweathermap.org/data/2.5/weather"
@@ -37,4 +37,5 @@ def index():
         country = request.form['country']
         weather_info = get_weather(api_key, city, country)
         return render_template('weatherapp.html', weather_info=weather_info)
-        return render_template('weatherapp.html')
+
+    return render_template('weatherapp.html')
