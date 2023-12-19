@@ -19,6 +19,6 @@ app.register_blueprint(imageconverter_app, url_prefix="/imageconverter")
 
 if __name__ == '__main__':
     try:
-        app.run(port=8004,debug=True)
+        app.run(debug=True)
     except Exception as e:
         print(f"An error occurred: {e}")
