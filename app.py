@@ -24,7 +24,7 @@ if __name__ == '__main__':
     try:
         os.makedirs('uploads', exist_ok=True)
         os.makedirs('outputs', exist_ok=True)
-        app.run(port=8004,debug=True)
+        app.run(debug=True)
     except Exception as e:
         print(f"An error occurred: {e}")
 
