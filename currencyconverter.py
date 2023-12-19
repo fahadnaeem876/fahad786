@@ -1,9 +1,13 @@
 import os
-from flask import Flask, render_template, request, Blueprint
+from flask import Flask, render_template, request, jsonify ,Blueprint
+from dotenv import load_dotenv
 
 import requests
 
-currencyconverter_app = Blueprint("currencyconverter", __name__)
+load_dotenv()
+
+
+currencyconverter_app = Blueprint("currencyconerter",__name__) 
 
 class CurrencyConverter:
     def __init__(self, api_key):
@@ -35,7 +39,7 @@ class CurrencyConverter:
 @currencyconverter_app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        api_key = os.environ.get("currency_api_key")
+        api_key =os.getenv("currency_api_key")
         converter = CurrencyConverter(api_key)
 
         amount = float(request.form.get("amount"))
@@ -45,16 +49,6 @@ def index():
         converted_amount = converter.convert_currency(amount, from_currency, to_currency)
 
         if converted_amount is not None:
-            return render_template(
-                "currencyconverter.html",
-                result=f"{amount} {from_currency} is equal to {converted_amount:.2f} {to_currency}",
-            )
+            return render_template("currencyconverter.html", result=f"{amount} {from_currency} is equal to {converted_amount:.2f} {to_currency}")
 
     return render_template("currencyconverter.html", result=None)
-
-if __name__ == "__main__":
-    try:
-        # Use a self-signed certificate for testing (replace with your actual certificate files in production)
-        app.run(debug=True, ssl_context=("cert.pem", "key.pem"))
-    except Exception as e:
-        print(f"An error occurred: {e}")
