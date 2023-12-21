@@ -6,7 +6,7 @@ from currencyconverter import currencyconverter_app
 from languagetranslator import languagetranslator_app
 from imageconverter import imageconverter_app
 from pdftoword import pdftoword_app
-
+from imagetotext import imagetotext_app
 app = Flask(__name__)
 
 @app.route('/')
@@ -19,6 +19,7 @@ app.register_blueprint(currencyconverter_app, url_prefix="/currencyconverter")
 app.register_blueprint(languagetranslator_app, url_prefix="/languagetranslator")  
 app.register_blueprint(imageconverter_app, url_prefix="/imageconverter")
 app.register_blueprint(pdftoword_app, url_prefix="/pdftoword")
+app.register_blueprint(imagetotext_app, url_prefix="/imagetotext")
 
 if __name__ == '__main__':
     try:
