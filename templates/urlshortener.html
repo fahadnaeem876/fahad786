@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <title>URL Shortener App</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">URL Shortener App</h1>
+        <form method="post">
+            <div class="form-group">
+                <label for="longUrl">Enter the URL to shorten:</label>
+                <input type="text" class="form-control" id="longUrl" name="long_url" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Shorten URL</button>
+        </form>
+        {% if short_url %}
+            <div class="alert alert-success mt-3" role="alert">
+                Shortened URL: {{ short_url }}
+                <button class="btn btn-sm btn-outline-secondary ml-2" onclick="copyToClipboard('{{ short_url }}')">Copy to Clipboard</button>
+            </div>
+        {% endif %}
+        {% if warning %}
+            <div class="alert alert-warning mt-3" role="alert">
+                {{ warning }}
+            </div>
+        {% endif %}
+        {% if error %}
+            <div class="alert alert-danger mt-3" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        function copyToClipboard(text) {
+            var dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = text;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+        }
+    </script>
+</body>
+</html>
